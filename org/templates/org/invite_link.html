@@ -1,0 +1,36 @@
+{% extends 'core/dashboard.html' %}
+{% load crispy_forms_tags %}
+
+{% block page-content %}
+<div class="col-sm-9 mx-auto border border-light p-3 mb-4">
+    <div class="card text-center border-success">
+        <div class="card-header">Invited {{ friend_mail }}</div>
+        <div class="card-body">
+            <h5 class="card-title">An email has been sent to {{ friend_mail }}</h5>
+            <p class="card-text">
+                <p>
+                    you can also send this invite link too {{ friend_mail }}:
+                </p>
+                <p><small class="text-muted">{{ invite_link }}</small></p> 
+                <p><a href="#" class="btn btn-success mt-2" id="inv-link">Copy Link</a></p>
+            </p>
+        </div>
+        <div class="card-footer">
+            <a href="{% url 'org:invite_member' %}" class="btn btn-outline-info">Invite another member</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block ds-scripts %}
+    <script>
+        $("#inv-link").click(function(e){
+            e.preventDefault();
+            var $temp = $("<input>");
+            var $link = "{{ invite_link }}"
+            $("body").append($temp);
+            $temp.val($link).select();
+            document.execCommand("copy");
+            $temp.remove();
+        });
+    </script>
+{% endblock ds-scripts %}

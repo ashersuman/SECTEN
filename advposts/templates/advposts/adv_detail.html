@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% block stylesheets %}
+<style>
+    .card-header {
+        padding: .75rem 1.25rem;
+        margin-bottom: 0;
+        background-color: #fff;
+        border-bottom: 1px solid rgba(0, 0, 0, .125);
+        color: #258dca !important;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 1;
+    }
+
+    /* .adv-title{
+        font-size: 21px;
+        font-weight: 400;
+        padding: 0;
+        margin: 0 0 15px;
+        text-align: justify;
+        color: #000!important;
+    } */
+    .notice .form-group.row {
+        border-bottom: 1px solid #efefef;
+    }
+    .control-label{
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-8 mx-auto p-3 mb-4">
+        <div class="row">
+            <legend class="col-sm-9 mb-4 h3">{{ adv_detail.title }}</legend>
+            {% if request.user == adv_detail.author %}
+            <div class="col-sm-3">
+                <div class="btn btn-success go inline float-right"><a class="text-reset text-decoration-none" href="{% url 'advposts:advert-update' adv_detail.tenderID %}">Update</a></div>
+            </div>
+            {% endif %}
+        </div>
+        <!-- Card Notice -->
+        <div class="card mb-4 notice">
+            <div class="card-header"> Tender Notice </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-3 control-label">TDR No.</label>
+                    <div class="col-sm-9">{{ adv_detail.tenderID }}</div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-3 control-label">Tendering Authority</label>
+                    <div class="col-sm-9">{{ adv_detail.organisation }}</div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-3 control-label">Department</label>
+                    <div class="col-sm-9">{{ adv_detail.dept }}</div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-3 control-label">Tender Brief</label>
+                    <div class="col-sm-9">{{ adv_detail.title }}</div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-3 control-label">Status</label>
+                    {% if adv_detail.state == 'Active' %}
+                    <div class="col-sm-9" style="color: green;"><i class="fa fa-check-circle" aria-hidden="true"></i> {{ adv_detail.state }}</div>
+                    {% else %}
+                    <div class="col-sm-9" style="color: red;"><i class="fa fa-times-circle" aria-hidden="true"></i> {{ adv_detail.state }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-3 control-label">Publish Date</label>
+                    <div class="col-sm-9">{{ adv_detail.created_at|date:"d-m-Y" }}</div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-3 control-label">Due Date</label>
+                    <div class="col-sm-9">{{ adv_detail.bid_end_date|date:"d-m-Y" }}</div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-3 control-label">Opening Date</label>
+                    <div class="col-sm-9">{{ adv_detail.bid_start_date|date:"d-m-Y" }}</div>
+                </div>
+            </div>
+        </div>
+        {% if request.user.id in org %}
+        <div class="card mb-4 notice">
+            <div class="card-header"> Member's Information </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-3 control-label">Upload Opening Date</label>
+                    <div class="col-sm-9">{{ adv_detail.part_start_date|date:"d-m-Y" }}</div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-3 control-label">Upload Deadline</label>
+                    <div class="col-sm-9">{{ adv_detail.part_end_date|date:"d-m-Y" }}</div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% if request.user == adv_detail.author %}
+        <div class="card mb-4 notice">
+            <div class="card-header"> Combiner Information </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-3 control-label">Combine Opening Date</label>
+                    <div class="col-sm-9">{{ adv_detail.comb_start_date|date:"d-m-Y" }}</div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-3 control-label">Combine Deadline</label>
+                    <div class="col-sm-9">{{ adv_detail.comb_end_date|date:"d-m-Y" }}</div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <!-- Card Details -->
+        <div class="card mb-4">
+            <div class="card-header"> Tender Description </div>
+            <div class="card-body">
+                {{ adv_detail.descrip }}
+            </div>
+        </div>
+        <!-- Attachment -->
+        <div class="card mb-4">
+            <div class="card-header"> Attachment </div>
+            <div class="card-body">
+                <a class="btn btn-outline-primary mx-auto" href="{{ adv_detail.advFile.url }}" download><i class="fa fa-download"></i> Download</a>
+            </div>
+        </div>
+        
+        <!-- Controls -->
+        <div class="card mb-4">
+            <div class="card-header"> Actions </div>
+            {% if request.user.is_authenticated %}
+            <div class="card-body">
+                {% if request.user.is_bidder %}
+                <a href=# class="btn btn-outline-success mx-auto">Place Bid</a>
+                <button class="btn btn-outline-info mx-auto">Check Bid Status</button>
+                {% elif request.user.is_staff %}
+                <button class="btn btn-outline-success mx-auto">Pass Shares</button>
+                <button class="btn btn-warning mx-auto">View all</button>
+                {% elif request.user.is_orgadmin %}
+                <button class="btn btn-outline-success mx-auto">Combine all</button>
+                <button class="btn btn-warning mx-auto">Select & Combine</button>
+                {% endif %}
+            </div>
+            {% else %}
+            <div class="card-body">
+                <a class="btn btn-outline-success mx-auto font-weight-bold">Login</a>
+                <a class="btn btn-outline-info mx-auto font-weight-bold">Sign Up</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% for n in org %}
+    <h1>{{ n.user }}</h1>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,21 @@
+--Partially Done-- # BID PART ID Generation Logic. >> Not Implemented properly
+
+Priority - features
+--Done-- # create ad form/view.
+--Done-- # update ad form
+--Partially Done-- # advertisement list view >> Add Pagination
+--Partially Done-- # ad detail page >> Implement Actions >> File Download
+--Partially Done-- # core app manages all - that's why dashboard resides there. >> needs planning
+# add features to the core split file and combine. 
+# bidder should be able to view BID status - may require models changes
+# My Account Profile + Org update (https://www.codementor.io/@lakshminp/handling-multiple-forms-on-the-same-page-in-django-fv89t2s3j)
+
+# Add a login required middleware to lockdown secure routes.
+- Resources
+: https://stackoverflow.com/questions/23398393/login-required-for-multiple-views
+# Need Media Files Cleanup
+
+# Improve app to fit for pwa - may need ui redesign 
+# UI refinement - to be done at last
+
+#Setting up environment variables : https://www.youtube.com/watch?v=IolxqkL7cD8

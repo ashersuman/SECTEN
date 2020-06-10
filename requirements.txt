@@ -1,0 +1,6 @@
+pip install django-flatpickr
+pip install django-widget-tweaks
+pip install django-organizations
+pip install django-pwa
+pip install django-invitations
+pip install django-crispy-forms

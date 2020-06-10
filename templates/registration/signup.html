@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <style type="text/css">
+        .headin{
+            color:royalblue;
+        }
+    </style>
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 class="mb-3 font-weight-bold headin">Sign Up</h1>
+        <p class="h5 headin">Select below the type of account you want to create</p>
+        <a href="{% url 'accounts:signup_bidder' %}" class="m-3 btn btn-warning btn-lg">I am a Bidder</a>
+        <a href="{% url 'accounts:signup_member' %}" class="m-3 mx-auto btn btn-primary btn-lg">I am a Secure Member</a>
+    </div>
+{% endblock %}

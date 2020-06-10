@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if request.user.is_authenticated %}
+        <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto">
+        {% if request.user.is_bidder %}
+            <h1 class="display-4">Hello, {{ request.user.first_name }}</h1>
+            <p class="lead">Advertisement will be coming soon!</p>
+        {% elif request.user.is_orgadmin or request.user.is_staff %}
+            <h1 class="display-4">Hello, {{ request.user.first_name }}</h1>
+            <p class="lead">Developers are working!!</p>
+        {% endif %}
+        </div>
+    {% else %}
+        <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+            <h1 class="display-4">Secure and Simple</h1>
+            <p class="lead">A new gen E-Tender app which is Secure, Easy to use and Hassel free process.</p>
+        </div>
+    {% endif %}
+{% endblock %}

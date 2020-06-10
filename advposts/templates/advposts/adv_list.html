@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="col-sm-6 mx-auto p-3 mb-4">
+  <table class="table table-responsive ">
+    <thead>
+      <tr>
+        <th scope="col">Organisation</th>
+        <th scope="col">Date</th>
+        <th scope="col">Summary</th>
+        <th scope="col">Deadline</th>
+        <th scope="col">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for ad in advs %}
+      <tr>
+        <th scope="row">{{ ad.organisation }}</th>
+        <td>{{ ad.bid_start_date|date:"d M,Y" }}</td>
+        <td><a href="{% url 'advposts:adv-detail' ad.tenderID %}">{{ ad.title }}</a></td>
+        <td>{{ ad.bid_end_date|date:"d M,Y" }}</td>
+        {% if ad.state == "Active" %}
+        <td style="color: green;"><i class="fa fa-check-circle" aria-hidden="true"></i> {{ ad.state }}</td>
+        {% else %}
+        <td style="color: red;"><i class="fa fa-times-circle" aria-hidden="true"></i> {{ ad.state }}</td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <style>
+        ul.errorlist{
+            list-style-type: none;
+            margin: 0;
+            text-align: left;
+        }
+        .form-signin {
+            width: 100%;
+            max-width: 330px;
+            padding: 15px;
+            margin: auto;
+        }
+        .form-signin .checkbox {
+            font-weight: 400;
+        }
+        .form-signin .form-control {
+            position: relative;
+            box-sizing: border-box;
+            height: auto;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .form-signin .form-control:focus {
+            z-index: 2;
+        }
+        .form-signin input[type="email"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        .form-signin input[type="password"] {
+            margin-bottom: 10px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+    </style>
+
+    <form class="form-signin " method="POST">{% csrf_token %}
+        <!--Add an image-->
+        <!-- <img class="mb-4" src="" alt="" width="72" height="72"> -->
+        <h1 class="h3 mb-3 font-weight-normal">Log In</h1>
+        
+        <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        
+        {% if login_form.non_field_errors %}
+            <p>
+                <small style="color:red; text-align: left;">{{ login_form.non_field_errors }}</small>
+            </p>
+        {% endif %}
+
+        {% for field in login_form %}
+            <p>
+            {% for error in field.errors %}
+                <small style="color: red;">{{ error }}</small>
+            {% endfor %}
+            </p>
+        {% endfor %}
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Log In</button>
+
+    </form>
+  
+{% endblock %}
