@@ -68,4 +68,3 @@ def pre_save_create_bidID(sender, instance, *args, **kwargs):
         instance.bidID = unique_tender_id_generator(instance)
 
 pre_save.connect(pre_save_create_bidID, sender=BidDetails)
-
