@@ -1,3 +1,4 @@
 #ignore all
 *.vscode
 *.sqlite3
+req.txt
