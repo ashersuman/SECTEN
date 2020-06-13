@@ -68,3 +68,12 @@ def pre_save_create_bidID(sender, instance, *args, **kwargs):
         instance.bidID = unique_tender_id_generator(instance)
 
 pre_save.connect(pre_save_create_bidID, sender=BidDetails)
+
+
+class FileModel(models.Model):
+    file = models.FileField(upload_to='uploaded_files/')
+    created = models.DateTimeField(auto_now=True)
+
+    def delete(self, *args, **kwargs):
+        self.file.delete()
+        return super().delete(*args, **kwargs)

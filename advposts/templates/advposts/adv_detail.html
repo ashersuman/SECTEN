@@ -108,7 +108,7 @@
             {% if request.user.is_authenticated %}
             <div class="card-body">
                 {% if request.user.is_bidder %}
-                <a href=# class="btn btn-outline-success mx-auto" id="upload-bid">Place Bid</a>
+                <a href='#' class="btn btn-outline-success mx-auto" id="upload-bid">Place Bid</a>
                 <button class="btn btn-outline-info mx-auto">Check Bid Status</button>
                 {% elif request.user.is_staff and request.user.id in org%}
                 <button class="btn btn-outline-success mx-auto">Pass Shares</button>
@@ -154,9 +154,12 @@
             </g>
             </svg>
         </div>
-        <input type="file" name="files[]" id="file" class="box-file" data-multiple-caption="{count} files selected" multiple="">
-        <label class="up-label" for="file"><strong>Choose a file</strong><span class="box-dragndrop"> or drag it here</span>.</label>
-        <button type="submit" class="up-button">Upload</button>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="bid_img" id="file" class="box-file">
+            <label class="up-label" for="file"><strong>Choose a file</strong><span class="box-dragndrop"> or drag it here</span>.</label>
+            <button type="submit" class="up-button">Upload</button>
+        </form>
     </div>
 </div>
 {% endif %}

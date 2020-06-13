@@ -1,5 +1,5 @@
 document.getElementById('upload-bid').addEventListener('click', 
-function () {
+function(){
     document.querySelector('html').style.overflow = 'hidden';
     document.querySelector('.bg-modal').style.display = 'flex';
 });

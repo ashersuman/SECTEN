@@ -10,6 +10,9 @@ from .models import AdvDetails
 from django.http import Http404
 from django.core.exceptions import PermissionDenied
 
+from advposts.utils import startGen
+from advposts.models import FileModel
+
 # Create your views here.
 def home_view(request):
     return render(request,'advposts/home.html')
@@ -63,6 +66,7 @@ class advert_list(TemplateView):
         return context
 
 class advert_detail(TemplateView):
+    #BID UPLOAD POPUP
     template_name = 'advposts/adv_detail.html'
 
     def get_context_data(self, **kwargs):
@@ -70,6 +74,23 @@ class advert_detail(TemplateView):
         context['adv_detail'] = AdvDetails.objects.get(pk=self.kwargs['tender_id'])
         context['org'] = OrgUser.objects.filter(organization=context['adv_detail'].organisation).values_list('user',flat=True)
         return context
+    
+    def post(self, request, *args, **kwargs):
+        file_model = FileModel()
+        context = self.get_context_data()
+        if request.FILES:
+            uploaded_file = request.FILES['bid_img']
+            print(uploaded_file.name)
+            file_model.file = uploaded_file
+            file_model.save()
+            path = "media/uploaded_files/"+uploaded_file.name
+            startGen(path)
+            file_model = FileModel.objects.get(pk=file_model.id)
+            file_model.delete()
+            print('Deleted')
+
+        return super(TemplateView, self).render_to_response(context)
+
 
 class bidding_view(CreateView):
     pass

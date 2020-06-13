@@ -1,5 +1,5 @@
 from django.contrib import admin
-from advposts.models import AdvDetails,BidDetails
+from advposts.models import AdvDetails, BidDetails, FileModel
 # Register your models here.
 
 class AdvAdmin(admin.ModelAdmin):
@@ -15,3 +15,4 @@ class AdvAdmin(admin.ModelAdmin):
 
 admin.site.register(AdvDetails, AdvAdmin)
 admin.site.register(BidDetails)
+admin.site.register(FileModel)

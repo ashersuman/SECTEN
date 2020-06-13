@@ -31,59 +31,64 @@ def unique_bidpart_id_generator(instance):
         return unique_bidpart_id_generator(instance)
     return order_new_id
 
-class generate_share(object):
-    m = 256
-    A = 71
-    B = random.randint(31,255)
-    @classmethod
-    def encryption(cls,original_img):
-        """
-        Encryption of image 
-        """
-        height = original_img.shape[0]
-        width = original_img.shape[1]
-        for i in range(0,height):
-            for j in range(0,width):
-                a = original_img[i][j]      # rgb list
-                r = (A*a[0] + B)%m
-                g = (A*a[1] + B)%m
-                b = (A*a[2] + B)%m
-                original_img[i][j] = [r,g,b]
-            
-        return cv2.imwrite('media/encrypted_img.png', original_img)
+m = 256
+A = 71
+B = random.randint(31,255)
+def encryption(original_img):
+    """
+    Encryption of image 
+    """
+    height = original_img.shape[0]
+    width = original_img.shape[1]
+    for i in range(0,height):
+        for j in range(0,width):
+            a = original_img[i][j]      # rgb list
+            r = (A*a[0] + B)%m
+            g = (A*a[1] + B)%m
+            b = (A*a[2] + B)%m
+            original_img[i][j] = [r,g,b]
+        
+    return cv2.imwrite('media/encrypted_img.png', original_img)
 
-    def createShare(self,original_img,n):
-        height = original_img.shape[0]
-        width = original_img.shape[1]
-        blank_image = np.zeros((height,width,3), np.uint8)
-        for share in range(0,n):
-            if share < n-1 :
-                for i in range(0,height):
-                    for j in range(0,width):
-                        # a = temp_img[i][j]
-                        r = random.randint(0,255)
-                        g = random.randint(0,255)
-                        b = random.randint(0,255)
-                        blank_image[i][j] = [r,g,b]
-                cv2.imwrite('media/random{}.png'.format(share+1),blank_image)
-            if share == 0:
-                cv2.imwrite('media/share{}.png'.format(share+1),blank_image)
+def startGen(absolute_path):
+    image = cv2.imread(absolute_path,1) #"/home/hackhard/django-upload-example/"+
+    image=cv2.resize(image,(240,240))
+    a=encryption(image)
+    n=4
+    b=createShare(image,n)
 
-            elif share > 0 and share <= n-2 :
-                temp_img = cv2.imread('media/random{}.png'.format(share))
-                for i in range(0,height):
-                    for j in range(0,width):
-                        a = blank_image[i][j]
-                        b = temp_img[i][j]
-                        temp_img[i][j] = [(a[0]^b[0]), (a[1]^b[1]), (a[2]^b[2])]
-                cv2.imwrite('media/share{}.png'.format(share+1),temp_img)
+def createShare(original_img,n):
+    height = original_img.shape[0]
+    width = original_img.shape[1]
+    blank_image = np.zeros((height,width,3), np.uint8)
+    for share in range(0,n):
+        if share < n-1 :
+            for i in range(0,height):
+                for j in range(0,width):
+                    # a = temp_img[i][j]
+                    r = random.randint(0,255)
+                    g = random.randint(0,255)
+                    b = random.randint(0,255)
+                    blank_image[i][j] = [r,g,b]
+            cv2.imwrite('media/random{}.png'.format(share+1),blank_image)
+        if share == 0:
+            cv2.imwrite('media/share{}.png'.format(share+1),blank_image)
 
-            else:
-                temp_img = cv2.imread('media/random{}.png'.format(share))
-                for i in range(0,height):
-                    for j in range(0,width):
-                        a = temp_img[i][j]
-                        b = original_img[i][j]
-                        temp_img[i][j] = [(a[0]^b[0]), (a[1]^b[1]), (a[2]^b[2])]
+        elif share > 0 and share <= n-2 :
+            temp_img = cv2.imread('media/random{}.png'.format(share))
+            for i in range(0,height):
+                for j in range(0,width):
+                    a = blank_image[i][j]
+                    b = temp_img[i][j]
+                    temp_img[i][j] = [(a[0]^b[0]), (a[1]^b[1]), (a[2]^b[2])]
+            cv2.imwrite('media/share{}.png'.format(share+1),temp_img)
 
-                cv2.imwrite('media/share{}.png'.format(share+1), temp_img)
+        else:
+            temp_img = cv2.imread('media/random{}.png'.format(share))
+            for i in range(0,height):
+                for j in range(0,width):
+                    a = temp_img[i][j]
+                    b = original_img[i][j]
+                    temp_img[i][j] = [(a[0]^b[0]), (a[1]^b[1]), (a[2]^b[2])]
+
+            cv2.imwrite('media/share{}.png'.format(share+1), temp_img)
