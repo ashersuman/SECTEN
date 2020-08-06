@@ -2,3 +2,4 @@
 *.vscode
 *.sqlite3
 req.txt
+test.py

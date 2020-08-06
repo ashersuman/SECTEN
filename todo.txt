@@ -9,6 +9,7 @@ Priority - features
 # add features to the core split file and combine. 
 # bidder should be able to view BID status - may require models changes
 # My Account Profile + Org update (https://www.codementor.io/@lakshminp/handling-multiple-forms-on-the-same-page-in-django-fv89t2s3j)
+# Bid done success message
 
 # Add a login required middleware to lockdown secure routes.
 - Resources

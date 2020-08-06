@@ -2,6 +2,7 @@ import random
 import datetime
 import string
 import cv2
+import os
 import numpy as np
 def random_string_generator(size=7, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
@@ -92,3 +93,45 @@ def createShare(original_img,n):
                     temp_img[i][j] = [(a[0]^b[0]), (a[1]^b[1]), (a[2]^b[2])]
 
             cv2.imwrite('media/share{}.png'.format(share+1), temp_img)
+
+def combine_share(path_list):
+    HERE = os.path.dirname(os.path.abspath(__file__))
+    image_path = os.path.join(HERE, path_list[0])
+    img1 = cv2.imread(image_path,1)
+    if img1 is None:
+        print("failed to load 1")
+    
+    image_path = os.path.join(HERE, path_list[1])
+    img2 = cv2.imread(image_path,1)
+    if img2 is None:
+        print("failed to load 2")
+    
+    image_path = os.path.join(HERE, path_list[2])
+    img3 = cv2.imread(image_path,1)
+    if img3 is None:
+        print("failed to load 3")
+    
+    image_path = os.path.join(HERE, path_list[3])
+    img4 = cv2.imread(image_path,1)
+    if img4 is None:
+        print("failed to load 4")
+
+    height = img1.shape[0]
+    width = img1.shape[1]
+    pr =0
+    for i in range(0,height):
+        for j in range(0, width):
+            img1_px = img1[i][j]
+            img2_px = img2[i][j]
+            img3_px = img3[i][j]
+            img4_px = img4[i][j]
+
+            px1 = [(img1_px[0]^img2_px[0]), (img1_px[1]^img2_px[1]), (img1_px[2]^img2_px[2])]    
+            px2 = [(px1[0]^img3_px[0]), (px1[1]^img3_px[1]), (px1[2]^img3_px[2])]
+            px = [(px2[0]^img4_px[0]), (px2[1]^img4_px[1]), (px2[2]^img4_px[2])]
+        
+            if(pr ==  0):
+                pr=1 
+            img1[i][j] = px
+            
+    cv2.imwrite('result.png',img1)

@@ -108,7 +108,9 @@
             {% if request.user.is_authenticated %}
             <div class="card-body">
                 {% if request.user.is_bidder %}
+                {% if adv_detail.state == 'Active' %}
                 <a href='#' class="btn btn-outline-success mx-auto" id="upload-bid">Place Bid</a>
+                {% endif %}
                 <button class="btn btn-outline-info mx-auto">Check Bid Status</button>
                 {% elif request.user.is_staff and request.user.id in org%}
                 <button class="btn btn-outline-success mx-auto">Pass Shares</button>
