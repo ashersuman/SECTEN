@@ -4,6 +4,9 @@ import string
 import cv2
 import os
 import numpy as np
+from advposts.signals import post_creation
+from django.dispatch import receiver
+
 def random_string_generator(size=7, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
@@ -51,14 +54,14 @@ def encryption(original_img):
         
     return cv2.imwrite('media/encrypted_img.png', original_img)
 
-def startGen(absolute_path):
+def startGen(absolute_path,ctx):
     image = cv2.imread(absolute_path,1) #"/home/hackhard/django-upload-example/"+
     image=cv2.resize(image,(240,240))
     a=encryption(image)
     n=4
-    b=createShare(image,n)
+    b=createShare(image,n,ctx)
 
-def createShare(original_img,n):
+def createShare(original_img,n,ctx):
     height = original_img.shape[0]
     width = original_img.shape[1]
     blank_image = np.zeros((height,width,3), np.uint8)
@@ -93,7 +96,24 @@ def createShare(original_img,n):
                     temp_img[i][j] = [(a[0]^b[0]), (a[1]^b[1]), (a[2]^b[2])]
 
             cv2.imwrite('media/share{}.png'.format(share+1), temp_img)
+    
+    post_creation.send(sender=createShare,ctext=ctx)
 
+'''
+    Receiver for Signal
+    This add share to the Organisation Member account
+'''
+@receiver(post_creation)
+def post_share_creation(**kwargs):
+    print("Something")
+    print(kwargs['ctext'])
+
+
+############################################################################
+########                                                            ######## 
+########                 SHARE COMBINATION                          ########    
+########                                                            ########
+############################################################################
 def combine_share(path_list):
     HERE = os.path.dirname(os.path.abspath(__file__))
     image_path = os.path.join(HERE, path_list[0])

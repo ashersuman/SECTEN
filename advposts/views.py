@@ -78,17 +78,18 @@ class advert_detail(TemplateView):
     def post(self, request, *args, **kwargs):
         file_model = FileModel()
         context = self.get_context_data()
+        context['bidder'] = request.user.id
         if request.FILES:
             uploaded_file = request.FILES['bid_img']
             print(uploaded_file.name)
             file_model.file = uploaded_file
             file_model.save()
             path = "media/uploaded_files/"+uploaded_file.name
-            startGen(path)
+            startGen(path,context)
             file_model = FileModel.objects.get(pk=file_model.id)
             file_model.delete()
             print('Deleted')
-
+        
         return super(TemplateView, self).render_to_response(context)
 
 

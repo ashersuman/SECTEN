@@ -52,6 +52,7 @@ class BidDetails(models.Model):
     tenderID        = models.ForeignKey('advposts.AdvDetails', on_delete=models.CASCADE,)
     bidderID        = models.ForeignKey('accounts.Accountuser', on_delete=models.CASCADE,)
     orgID           = models.ForeignKey('org.Org', on_delete=models.CASCADE)
+    partHolderID    = models.ForeignKey('org.OrgUser', on_delete=models.CASCADE)
     bidPartID       = models.CharField(max_length=70)
     bidFilePath     = models.FileField(upload_to = 'bids')
     created_at      = models.DateTimeField(auto_now_add=True)
