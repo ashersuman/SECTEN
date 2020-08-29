@@ -1,3 +1,7 @@
+# from advposts.models import AdvDetails, BidDetails
+from accounts.models import AccountUser
+from advposts.models import BidDetails
+from org.models import OrgUser
 import random
 import datetime
 import string
@@ -105,9 +109,26 @@ def createShare(original_img,n,ctx):
 '''
 @receiver(post_creation)
 def post_share_creation(**kwargs):
-    print("Something")
+    print("Starting to assign shares")
+    ctxData = kwargs['ctext']
+    members = OrgUser.objects.filter(organization=ctxData['adv_detail'].organisation).filter(is_admin = False)
+    bidder = AccountUser.objects.get(pk = ctxData['bidder'])
+    b = str(ctxData['adv_detail'].tenderID) # 36 character
+    i = str(ctxData['adv_detail'].organisation.pk) 
+    d = str(ctxData['bidder'])
+    
+    for member,share in zip(members,range(1,5)):
+        s = BidDetails.objects.create(
+            bidID = b+'-'+i+'-'+d,
+            tenderID = ctxData['adv_detail'],
+            bidderID = bidder,
+            orgID = ctxData['adv_detail'].organisation,
+            partHolderID = member,
+            bidFilePath = "media/share{}.png".format(share)
+        )
+    
     print(kwargs['ctext'])
-
+    print("Assign Complete")
 
 ############################################################################
 ########                                                            ######## 

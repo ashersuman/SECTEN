@@ -4,7 +4,7 @@ from accounts.models import AccountUser
 from org.models import Org
 from django.utils.timezone import now
 from django.db.models.signals import pre_save
-from .utils import unique_tender_id_generator
+# from .utils import unique_tender_id_generator
 # Create your models here.
 
 class AdvDetails(models.Model):
@@ -48,28 +48,21 @@ class BidDetails(models.Model):
     class Meta:
         verbose_name_plural = 'Bidding Details'
 
-    bidID           = models.CharField(max_length=16, primary_key=True, blank=True)
+    bidID           = models.CharField(max_length=70)
     tenderID        = models.ForeignKey('advposts.AdvDetails', on_delete=models.CASCADE,)
     bidderID        = models.ForeignKey('accounts.Accountuser', on_delete=models.CASCADE,)
     orgID           = models.ForeignKey('org.Org', on_delete=models.CASCADE)
     partHolderID    = models.ForeignKey('org.OrgUser', on_delete=models.CASCADE)
-    bidPartID       = models.CharField(max_length=70)
+    bidPartID       = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     bidFilePath     = models.FileField(upload_to = 'bids')
     created_at      = models.DateTimeField(auto_now_add=True)
     updated_at      = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.bidPartID
+        return self.bidID
     
     def createShare(self):
         pass
-
-def pre_save_create_bidID(sender, instance, *args, **kwargs):
-    if not instance.bidID:
-        instance.bidID = unique_tender_id_generator(instance)
-
-pre_save.connect(pre_save_create_bidID, sender=BidDetails)
-
 
 class FileModel(models.Model):
     file = models.FileField(upload_to='uploaded_files/')
